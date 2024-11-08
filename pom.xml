@@ -3,13 +3,13 @@
   <parent>
     <groupId>com.fasterxml.jackson</groupId>
     <artifactId>jackson-base</artifactId>
-    <version>2.18.0-SNAPSHOT</version>
+    <version>2.14.0</version> 
   </parent>
   
   <groupId>com.fasterxml.jackson.core</groupId>
   <artifactId>jackson-core</artifactId>
   <name>Jackson-core</name>
-  <version>2.18.0-SNAPSHOT</version>
+  <version>2.14.0</version>
   <packaging>jar</packaging>
   <description>Core Jackson processing abstractions (aka Streaming API), implementation for JSON</description>
   <licenses>
@@ -29,19 +29,17 @@
   </scm>
 
   <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
     <version.plugin.surefire>3.0.0-M5</version.plugin.surefire>
     <version.plugin.jacoco>0.8.8</version.plugin.jacoco>
     <osgi.export>com.fasterxml.jackson.core;version=${project.version}, com.fasterxml.jackson.core.*;version=${project.version}</osgi.export>
-  
     <version.android.sdk>26</version.android.sdk>
     <version.android.sdk.signature>0.5.1</version.android.sdk.signature>
     <version.plugin.animal-sniffer>1.23</version.plugin.animal-sniffer>
-
     <osgi.import>!ch.randelshofer.fastdoubleparser, *</osgi.import>
-
     <packageVersion.dir>com/fasterxml/jackson/core/json</packageVersion.dir>
     <packageVersion.package>${project.groupId}.json</packageVersion.package>
-
     <project.build.outputTimestamp>2024-02-27T01:34:44Z</project.build.outputTimestamp>
   </properties>
 
@@ -56,7 +54,7 @@
     <repository>
       <id>gradle-plugins-repo</id>
       <name>Gradle Plugins Repository</name>
-      <url>https://plugins.gradle.org/m2/</url> <!-- 新添加的仓库 -->
+      <url>https://plugins.gradle.org/m2/</url>
       <snapshots><enabled>true</enabled></snapshots>
       <releases><enabled>true</enabled></releases>
     </repository>
@@ -64,49 +62,53 @@
 
   <build>
     <plugins>
+      <!-- Compiler plugin for Java 11+ support -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+        </configuration>
+      </plugin>
 
       <!-- Jacoco plugin for code coverage -->
       <plugin>
-    <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <version>${version.plugin.jacoco}</version>
-    <executions>
-        <execution>
-            <id>prepare-agent</id>
-            <goals>
-                <goal>prepare-agent</goal>
-            </goals>
-        </execution>
-        <execution>
-            <id>report</id>
-            <phase>test</phase>
-            <goals>
-                <goal>report</goal>
-            </goals>
-        </execution>
-        <execution>
-            <id>post-unit-test</id>
-            <phase>test</phase>
-            <goals>
-                <goal>report</goal>
-            </goals>
-        </execution>
-        <execution>
-            <id>report-aggregate</id>
-            <phase>verify</phase>
-            <goals>
-                <goal>report-aggregate</goal>
-            </goals>
-            <configuration>
-                <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
-                <dataFile>${project.build.directory}/jacoco.exec</dataFile>
-                <reports>
-                    <xml>true</xml>
-                    <html>true</html>
-                </reports>
-            </configuration>
-        </execution>
-    </executions>
+  <groupId>org.jacoco</groupId>
+  <artifactId>jacoco-maven-plugin</artifactId>
+  <version>${version.plugin.jacoco}</version>
+  <executions>
+    <execution>
+      <id>prepare-agent</id>
+      <goals>
+        <goal>prepare-agent</goal>
+      </goals>
+      <phase>initialize</phase>
+    </execution>
+    <execution>
+      <id>report</id>
+      <phase>test</phase>
+      <goals>
+        <goal>report</goal>
+      </goals>
+    </execution>
+    <execution>
+      <id>report-aggregate</id>
+      <phase>verify</phase>
+      <goals>
+        <goal>report-aggregate</goal>
+      </goals>
+      <configuration>
+        <outputDirectory>${project.build.directory}/site/jacoco</outputDirectory> <!-- 更新路径 -->
+        <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+        <reports>
+          <xml>true</xml>
+          <html>true</html>
+        </reports>
+      </configuration>
+    </execution>
+  </executions>
 </plugin>
 
 
@@ -116,6 +118,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${version.plugin.surefire}</version>
         <configuration>
+          <argLine>${jacoco.agent.argLine}</argLine>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <excludes>
             <exclude>**/failing/**/*.java</exclude>
@@ -185,10 +188,9 @@
         <groupId>com.google.code.maven-replacer-plugin</groupId>
         <artifactId>replacer</artifactId>
         <configuration>
-        <skip>true</skip>
+          <skip>true</skip>
         </configuration>
       </plugin>
-
 
       <!-- Animal Sniffer plugin for Android compatibility -->
       <plugin>
@@ -225,6 +227,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
+      <version>5.9.2</version>
       <scope>test</scope>
     </dependency>
     
@@ -238,6 +241,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>3.23.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
