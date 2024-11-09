@@ -1,11 +1,12 @@
 package com.fasterxml.jackson.core.sym;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;  // 
+import com.github.javafaker.Faker;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import com.github.javafaker.Faker;
 
 /**
  * Classe de test pour la classe {@link NameN}.
@@ -32,6 +33,14 @@ public class NameNTest {
      */
     @BeforeEach
     public void setUp() {
+        // Imprimer les arguments de démarrage de la JVM
+        RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+        
+        System.out.println("JVM Arguments:");
+        for (String arg : runtimeMxBean.getInputArguments()) {
+            System.out.println(" - " + arg);
+        }
+
         // Arrange : Génération de données de test aléatoires
         randomName = faker.name().fullName();  // Utilisation de Faker pour générer un nom aléatoire
         randomHashCode = randomName.hashCode();
@@ -99,6 +108,4 @@ public class NameNTest {
         // Act & Assert : Un tableau de quads différent ne devrait pas correspondre
         assertFalse(nameN.equals(nonMatchingQuads, nonMatchingQuads.length), "Le tableau de quads ne devrait pas correspondre à NameN.");
     }
-
-
 }
