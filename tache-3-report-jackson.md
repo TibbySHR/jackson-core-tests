@@ -13,9 +13,10 @@ Bonus : Lien: https://github.com/TibbySHR/jackson-core-tests/blob/2.18/.lolcommi
 
 ## Les changements apportés à la Github action
 
+test.yml Lien: https://github.com/TibbySHR/jackson-core-tests/blob/2.18/.github/workflows/test.yml
+
 Nous avons modifié le fichier `test.yml` et en combinant nos connaissances sur l'utilisation des matrices. 
-Nous avons défini et utilisé cinq flags JVM différents dans le workflow GitHub Actions pour effectuer les tâches de compilation et de test.
-Nous avons utilisé:
+Nous avons défini et utilisé cinq flags JVM différents dans le workflow GitHub Actions：
           "-Xmx512m",
           "-XX:+AlwaysPreTouch",
           "-XX:+UseG1GC",
